@@ -1,0 +1,8 @@
+Django>=5.2.4
+djangorestframework>=3.16.0
+celery>=5.5.3
+redis>=5.0.0 
+django-cors-headers
+requests
+google-generativeai==0.8.3
+python-dotenv

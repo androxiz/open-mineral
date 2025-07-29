@@ -1,0 +1,90 @@
+.deal-basics-container {
+  background: #111;
+  color: #fff;
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 32px 32px 24px 32px;
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.3);
+}
+
+.deal-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.deal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.deal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deal-label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.deal-static {
+  background: #222;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #bbb;
+}
+
+select, input[type="number"] {
+  background: #222;
+  color: #fff;
+  border: 1.5px solid #333;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+select:focus, input[type="number"]:focus {
+  border: 1.5px solid #3b82f6;
+}
+
+.error {
+  border: 1.5px solid #f43f5e !important;
+}
+
+.error-text {
+  color: #f43f5e;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.deal-unit {
+  margin-left: 8px;
+  color: #aaa;
+  font-size: 0.95rem;
+}
+
+.deal-proceed-btn {
+  margin-top: 18px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.deal-proceed-btn:hover {
+  background: #1d4ed8;
+} 

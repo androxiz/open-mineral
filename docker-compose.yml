@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - GEMINI_API_KEY=AIzaSyByaJ8ujXbaLw6JyimD3_SrI7Tk8Xo2DTg
+    depends_on:
+      - redis
+    command: python manage.py runserver 0.0.0.0:8000
+
+  celery:
+    build: ./backend
+    volumes:
+      - .:/app
+    environment:
+      - GEMINI_API_KEY=AIzaSyByaJ8ujXbaLw6JyimD3_SrI7Tk8Xo2DTg
+    depends_on:
+      - redis
+    command: celery -A backend worker --loglevel=info --pool=solo
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    environment:
+      - HOST=0.0.0.0
+    depends_on:
+      - backend 
