@@ -46,7 +46,7 @@ This application allows traders to input and validate critical deal information 
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/androxiz/open-mineral
    cd open_mineral
    ```
 
@@ -363,5 +363,3 @@ For issues and questions:
 - Review the logs for error details
 
 ---
-
-**Built with ❤️ using React, Django, Celery, and Docker** 
