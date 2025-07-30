@@ -7,8 +7,8 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    environment:
-      - GEMINI_API_KEY=AIzaSyByaJ8ujXbaLw6JyimD3_SrI7Tk8Xo2DTg
+    env_file:
+      - ./backend/.env
     depends_on:
       - redis
     command: python manage.py runserver 0.0.0.0:8000
@@ -17,8 +17,8 @@ services:
     build: ./backend
     volumes:
       - .:/app
-    environment:
-      - GEMINI_API_KEY=AIzaSyByaJ8ujXbaLw6JyimD3_SrI7Tk8Xo2DTg
+    env_file:
+      - ./backend/.env
     depends_on:
       - redis
     command: celery -A backend worker --loglevel=info --pool=solo

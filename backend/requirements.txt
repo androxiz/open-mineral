@@ -6,3 +6,5 @@ django-cors-headers
 requests
 google-generativeai==0.8.3
 python-dotenv
+pandas>=2.0.0
+openpyxl>=3.1.0

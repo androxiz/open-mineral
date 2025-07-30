@@ -157,9 +157,38 @@ Key settings in `backend/settings.py`:
 
 ### Step 2: Commercial Terms
 - Configure delivery terms and packaging
-- Upload assay files (mocked)
+- **Upload assay files** - Upload .xlsx/.xls/.csv files to automatically fill assay data
 - Set TC/RC with AI suggestions
 - Click "AI Suggest" for pricing recommendations
+
+#### 📄 Assay File Upload
+The application supports automatic parsing of assay data from Excel files:
+
+**Supported formats:**
+- `.xlsx` (Excel 2007+)
+- `.xls` (Excel 97-2003)
+- `.csv` (Comma-separated values)
+
+**Required file structure:**
+Your Excel file should contain columns with element names. The system will look for:
+- **Pb** (Lead) - in % or decimal format
+- **Zn** (Zinc) - in % or decimal format  
+- **Cu** (Copper) - in % or decimal format
+- **Ag** (Silver) - in g/t or decimal format
+
+**Example file structure:**
+```
+| Pb | Zn | Cu | Ag |
+|----|----|----|----|
+|2.5 |4.2 |0.8 |45.0|
+```
+
+**How it works:**
+1. Upload your assay file in Step 2
+2. The system automatically parses the file
+3. Assay fields (Pb, Zn, Cu, Ag) are automatically filled
+4. You'll see a success message with extracted values
+5. You can manually adjust values if needed
 
 ### Step 3: Payment Terms
 - Select payment method and currency
@@ -186,6 +215,7 @@ Key settings in `backend/settings.py`:
 - `GET /api/materials/` - List materials
 - `POST /api/business-confirmations/` - Create confirmation
 - `POST /api/ai-suggestions/` - Get AI pricing suggestions
+- `POST /api/parse-assay-file/` - Parse Excel file and extract assay data
 
 ### Task Management
 - `POST /api/trigger-processing/` - Start background task

@@ -16,4 +16,5 @@ urlpatterns = [
     path('triggering-events/', views.TriggeringEventListView.as_view(), name='triggering-event-list'),
     path('surveyors/', views.SurveyorListView.as_view(), name='surveyor-list'),
     path('ai-suggestions/', views.ai_suggestions, name='ai-suggestions'),
+    path('parse-assay-file/', views.parse_assay_file, name='parse-assay-file'),
 ] 

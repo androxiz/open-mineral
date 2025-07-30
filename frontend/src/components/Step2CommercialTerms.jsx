@@ -92,10 +92,45 @@ export default function Step2CommercialTerms({ onProceed, onBack, formData, setF
     generateAISuggestions();
   };
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (file) {
+      // First, save the file to form data
       setFormData(prev => ({ ...prev, assay_file: file }));
+      
+      // Then try to parse it
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      try {
+        const response = await fetch(`${API_BASE}/parse-assay-file/`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success && result.data) {
+            // Update form data with parsed assay values
+            setFormData(prev => ({
+              ...prev,
+              assay_pb: result.data.assay_pb || 0,
+              assay_zn: result.data.assay_zn || 0,
+              assay_cu: result.data.assay_cu || 0,
+              assay_ag: result.data.assay_ag || 0,
+            }));
+            
+            // Show success message
+            alert(`✅ Successfully parsed ${file.name}\n\nExtracted values:\nPb: ${result.data.assay_pb}%\nZn: ${result.data.assay_zn}%\nCu: ${result.data.assay_cu}%\nAg: ${result.data.assay_ag} g/t`);
+          }
+        } else {
+          const errorData = await response.json();
+          alert(`❌ Error parsing file: ${errorData.message || errorData.error}`);
+        }
+      } catch (error) {
+        console.error('Error parsing file:', error);
+        alert('❌ Error uploading file. Please try again.');
+      }
     }
   };
 

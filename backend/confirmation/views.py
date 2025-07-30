@@ -165,7 +165,7 @@ def ai_suggestions(request):
                 genai.configure(api_key=gemini_api_key)
                 
                 # Create model
-                model = genai.GenerativeModel('gemini-1.5-pro')
+                model = genai.GenerativeModel('gemini-2.5-flash')
                 
                 # Prepare prompt
                 prompt = f"""Analyze this business confirmation data and provide specific pricing suggestions:
@@ -262,3 +262,79 @@ def generate_rc_suggestion(rc_value, material):
         return f"✅ Your RC (${rc}) is within market range. Good pricing!"
     else:
         return f"📊 Your RC (${rc}) is competitive. Market range: $4.20-$4.50/toz"
+
+@api_view(['POST'])
+def parse_assay_file(request):
+    """Parse Excel file and extract assay data"""
+    if 'file' not in request.FILES:
+        return Response({'error': 'No file uploaded'}, status=400)
+    
+    file = request.FILES['file']
+    
+    # Check file extension
+    if not file.name.lower().endswith(('.xlsx', '.xls', '.csv')):
+        return Response({'error': 'Unsupported file format. Please upload .xlsx, .xls, or .csv file'}, status=400)
+    
+    try:
+        import pandas as pd
+        
+        # Read the file based on extension
+        if file.name.lower().endswith('.csv'):
+            df = pd.read_csv(file)
+        else:
+            df = pd.read_excel(file)
+        
+        # Try to find assay columns with different possible names
+        assay_data = {}
+        
+        # Lead (Pb) - try different column names
+        pb_columns = ['Pb', 'Lead', 'PB', 'pb', 'lead']
+        for col in pb_columns:
+            if col in df.columns:
+                assay_data['assay_pb'] = float(df[col].iloc[0]) if len(df) > 0 else 0
+                break
+        else:
+            assay_data['assay_pb'] = 0
+        
+        # Zinc (Zn) - try different column names
+        zn_columns = ['Zn', 'Zinc', 'ZN', 'zn', 'zinc']
+        for col in zn_columns:
+            if col in df.columns:
+                assay_data['assay_zn'] = float(df[col].iloc[0]) if len(df) > 0 else 0
+                break
+        else:
+            assay_data['assay_zn'] = 0
+        
+        # Copper (Cu) - try different column names
+        cu_columns = ['Cu', 'Copper', 'CU', 'cu', 'copper']
+        for col in cu_columns:
+            if col in df.columns:
+                assay_data['assay_cu'] = float(df[col].iloc[0]) if len(df) > 0 else 0
+                break
+        else:
+            assay_data['assay_cu'] = 0
+        
+        # Silver (Ag) - try different column names
+        ag_columns = ['Ag', 'Silver', 'AG', 'ag', 'silver']
+        for col in ag_columns:
+            if col in df.columns:
+                assay_data['assay_ag'] = float(df[col].iloc[0]) if len(df) > 0 else 0
+                break
+        else:
+            assay_data['assay_ag'] = 0
+        
+        # Add file info
+        assay_data['file_name'] = file.name
+        assay_data['file_size'] = file.size
+        
+        return Response({
+            'success': True,
+            'data': assay_data,
+            'message': f'Successfully parsed {file.name}'
+        })
+        
+    except Exception as e:
+        return Response({
+            'error': f'Error parsing file: {str(e)}',
+            'message': 'Please ensure your file contains columns with element names (Pb, Zn, Cu, Ag)'
+        }, status=400)
